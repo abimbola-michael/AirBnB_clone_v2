@@ -13,7 +13,6 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
     __engine = None
@@ -31,23 +30,22 @@ class DBStorage:
             )
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls is None:
-            objects = self.__session.query(State).all()
-            objects.extend(self.__session.query(City).all())
-            objects.extend(self.__session.query(Place).all())
-            objects.extend(self.__session.query(Amenity).all())
-            objects.extend(self.__session.query(User).all())
-            objects.extend(self.__session.query(Review).all())
-        else:
-            if type(cls) == str:
-                cls = eval(cls)
-            objects = self.__session.query(cls)
-        return [
-                "{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects
-                ]
+        newDict = {}
+        if cls in self.__classes:
+            res = self.__session.query(cls)
+            for row in res:
+                key = "{}.{}".format(row.__class__.name__, row.id)
+                newDict[key] = row
+        elif cls is None:
+            for new2 in self.__classes:
+                res = self.__session.query(new2)
+                for row in res:
+                    key = "{}.{}".format(row.__class__.name__, row.id)
+                    newDict[key] = row
+        return newDict
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -74,6 +72,6 @@ class DBStorage:
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
         if key in self.__session:
             self.__session.delete(obj)
-    
+
     def close(self):
         self.__session.close()
