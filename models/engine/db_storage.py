@@ -27,18 +27,7 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         newDict = {}
-        if cls in self.__classes:
-            res = self.__session.query(cls)
-            for row in res:
-                key = "{}.{}".format(row.__class__.name__, row.id)
-                newDict[key] = row
-        elif cls is None:
-            for new2 in self.__classes:
-                res = self.__session.query(new2)
-                for row in res:
-                    key = "{}.{}".format(row.__class__.name__, row.id)
-                    newDict[key] = row
-        return newDict
+
         from models.base_model import Base, BaseModel
         from models.user import User
         from models.place import Place
@@ -47,6 +36,7 @@ class DBStorage:
         from models.amenity import Amenity
         from models.review import Review
         
+
         if cls is None:
             objects = self.__session.query(State).all()
             objects.extend(self.__session.query(City).all())
