@@ -5,6 +5,13 @@ from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from models.base_model import Base
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -27,15 +34,6 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         newDict = {}
-
-        from models.base_model import Base, BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
-        
 
         if cls is None:
             objects = self.__session.query(State).all()
@@ -63,14 +61,6 @@ class DBStorage:
     def reload(self):
         """Loads storage dictionary from database"""
 
-        from models.base_model import Base, BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
-
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session)
@@ -82,9 +72,7 @@ class DBStorage:
         """
         if obj is None:
             return
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        if key in self.__session:
-            self.__session.delete(obj)
+        self.__session.delete(obj)
 
     def close(self):
         self.__session.close()
