@@ -4,14 +4,7 @@ import json
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
-from model.base_model import Base, BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
-
+from models.base_model import Base
 
 
 class DBStorage:
@@ -34,6 +27,14 @@ class DBStorage:
     
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        from models.base_model import Base, BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+        
         if cls is None:
             objects = self.__session.query(State).all()
             objects.extend(self.__session.query(City).all())
@@ -45,9 +46,9 @@ class DBStorage:
             if type(cls) == str:
                 cls = eval(cls)
             objects = self.__session.query(cls)
-        return [
+        return {
                 "{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects
-                ]
+                }
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -59,6 +60,14 @@ class DBStorage:
 
     def reload(self):
         """Loads storage dictionary from database"""
+
+        from models.base_model import Base, BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
 
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
