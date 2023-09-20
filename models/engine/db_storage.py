@@ -26,7 +26,6 @@ class DBStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-<<<<<<< HEAD
         newDict = {}
         if cls in self.__classes:
             res = self.__session.query(cls)
@@ -40,7 +39,6 @@ class DBStorage:
                     key = "{}.{}".format(row.__class__.name__, row.id)
                     newDict[key] = row
         return newDict
-=======
         from models.base_model import Base, BaseModel
         from models.user import User
         from models.place import Place
@@ -63,7 +61,6 @@ class DBStorage:
         return {
                 "{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects
                 }
->>>>>>> f4e1bdf005f8720b7bfee35aaa0b0ab8639c25f3
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
