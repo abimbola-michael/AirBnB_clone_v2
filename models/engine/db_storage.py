@@ -4,14 +4,7 @@ import json
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
-from model.base_model import Base, BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
-
+from models.base_model import Base
 
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -33,6 +26,7 @@ class DBStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+<<<<<<< HEAD
         newDict = {}
         if cls in self.__classes:
             res = self.__session.query(cls)
@@ -46,6 +40,30 @@ class DBStorage:
                     key = "{}.{}".format(row.__class__.name__, row.id)
                     newDict[key] = row
         return newDict
+=======
+        from models.base_model import Base, BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+        
+        if cls is None:
+            objects = self.__session.query(State).all()
+            objects.extend(self.__session.query(City).all())
+            objects.extend(self.__session.query(Place).all())
+            objects.extend(self.__session.query(Amenity).all())
+            objects.extend(self.__session.query(User).all())
+            objects.extend(self.__session.query(Review).all())
+        else:
+            if type(cls) == str:
+                cls = eval(cls)
+            objects = self.__session.query(cls)
+        return {
+                "{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects
+                }
+>>>>>>> f4e1bdf005f8720b7bfee35aaa0b0ab8639c25f3
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -57,6 +75,14 @@ class DBStorage:
 
     def reload(self):
         """Loads storage dictionary from database"""
+
+        from models.base_model import Base, BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
 
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
