@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from models.base_model import Base
 
-
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
     __engine = None
@@ -24,9 +23,22 @@ class DBStorage:
             )
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        newDict = {}
+        if cls in self.__classes:
+            res = self.__session.query(cls)
+            for row in res:
+                key = "{}.{}".format(row.__class__.name__, row.id)
+                newDict[key] = row
+        elif cls is None:
+            for new2 in self.__classes:
+                res = self.__session.query(new2)
+                for row in res:
+                    key = "{}.{}".format(row.__class__.name__, row.id)
+                    newDict[key] = row
+        return newDict
         from models.base_model import Base, BaseModel
         from models.user import User
         from models.place import Place
@@ -83,6 +95,6 @@ class DBStorage:
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
         if key in self.__session:
             self.__session.delete(obj)
-    
+
     def close(self):
         self.__session.close()
