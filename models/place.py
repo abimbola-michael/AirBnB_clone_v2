@@ -55,7 +55,7 @@ class Place(BaseModel, Base):
                 if amenity.id in self.amenities_ids:
                     amenities_list.append(amenity)
             return amenities_list
-        
+
         @amenities.setter
         def amenities(self, value):
             if type(value) == Amenity:
