@@ -121,21 +121,21 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        arg_list = arg.split(" ")
+        arg_list = args.split(" ")
         kwargs = {}
 
         if len(arg_list) == 0 or arg_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         for i in range(1, len(arg_list)):
-            values = arg_list.split("=")
+            values = arg_list[i].split("=")
             key = values[0]
             value = values[1]
             if (value[0] == '"' and value[-1] == '"'):
-                value = value[1, -1]
+                value = value.replace('"', '')
             value = value.replace("_", " ")
             kwargs[key] = value
-        new_instance = HBNBCommand.classes[arg_list[0]]**kwargs()
+        new_instance = HBNBCommand.classes[arg_list[0]](**kwargs)
         storage.new(new_instance)
         print(new_instance.id)
         storage.save()
