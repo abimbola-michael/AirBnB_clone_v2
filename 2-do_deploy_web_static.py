@@ -11,20 +11,22 @@ env.hosts = ['52.3.220.197', '54.82.207.84']
 
 def do_deploy(archive_path):
     """scripty that distributes an archive to web servers"""
-    if exists(archive_path) is False:
+    if not exists(archive_path):
+        print("Not exist")
         return False
     try:
         a_file = archive_path.split("/")[-1]
-        ext = a_file.split(".")[0]
+        f_name = a_file.split(".")[0]
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(path, ext))
-        run('tar -xzf /tmp/{} -C {}{}/'.format(a_file, path, ext))
+        run('mkdir -p {}{}/'.format(path, f_name))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(a_file, path, f_name))
         run('rm /tmp/{}'.format(a_file))
-        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, ext))
-        run('rm -rf {}{}/web_static'.format(path, ext))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, f_name))
+        run('rm -rf {}{}/web_static'.format(path, f_name))
         run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'.format(path, ext))
+        run('ln -s {}{}/ /data/web_static/current'.format(path, f_name))
         return True
-    except:
+    except Exception as e:
+        print("except {}".format(e))
         return False
