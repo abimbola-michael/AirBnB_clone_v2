@@ -28,16 +28,17 @@ def do_deploy(archive_path):
         return False
     try:
         a_file = archive_path.split("/")[-1]
-        ext = a_file.split(".")[0]
+        f_name = a_file.split(".")[0]
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(path, ext))
-        run('tar -xzf /tmp/{} -C {}{}/'.format(a_file, path, ext))
+        run('rm -rf {}{}/'.format(path, f_name))
+        run('mkdir -p {}{}/'.format(path, f_name))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(a_file, path, f_name))
         run('rm /tmp/{}'.format(a_file))
-        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, ext))
-        run('rm -rf {}{}/web_static'.format(path, ext))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, f_name))
+        run('rm -rf {}{}/web_static'.format(path, f_name))
         run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'.format(path, ext))
+        run('ln -s {}{}/ /data/web_static/current'.format(path, f_name))
         return True
     except:
         return False

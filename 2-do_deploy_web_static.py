@@ -10,15 +10,15 @@ env.hosts = ['52.3.220.197', '54.82.207.84']
 
 
 def do_deploy(archive_path):
-    """scripty that distributes an archive to web servers"""
+    """script that distributes an archive to web servers"""
     if not exists(archive_path):
-        print("Not exist")
         return False
     try:
         a_file = archive_path.split("/")[-1]
         f_name = a_file.split(".")[0]
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
+        run('rm -rf {}{}/'.format(path, f_name))
         run('mkdir -p {}{}/'.format(path, f_name))
         run('tar -xzf /tmp/{} -C {}{}/'.format(a_file, path, f_name))
         run('rm /tmp/{}'.format(a_file))
@@ -27,6 +27,5 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
         run('ln -s {}{}/ /data/web_static/current'.format(path, f_name))
         return True
-    except Exception as e:
-        print("except {}".format(e))
+    except Exception:
         return False
