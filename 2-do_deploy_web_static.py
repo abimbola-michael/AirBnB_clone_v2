@@ -11,7 +11,7 @@ env.hosts = ['52.3.220.197', '54.82.207.84']
 
 def do_deploy(archive_path):
     """scripty that distributes an archive to web servers"""
-    if not exists(archive_path):
+    if exists(archive_path) is False:
         return False
     try:
         a_file = archive_path.split("/")[-1]
