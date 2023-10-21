@@ -61,7 +61,9 @@ def numberoddoreven(n):
     display a HTML page only if n is an integer
     """
     oddoreven = "even" if n % 2 == 0 else "odd"
-    return render_template("6-number_odd_or_even.html", n=n, oddoreven=oddoreven)
+    return render_template(
+            "6-number_odd_or_even.html", n=n, oddoreven=oddoreven
+            )
 
 
 if __name__ == "__main__":
