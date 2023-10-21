@@ -23,7 +23,7 @@ def hbnb():
 @app.route("/c/<text>", strict_slashes=False)
 def cisfun(text):
     """
-     display “C ” followed by the value of the text variable 
+     display “C ” followed by the value of the text variable
      (replace underscore _ symbols with a space )
     """
     return "C " + text.replace("_", " ")
@@ -31,7 +31,7 @@ def cisfun(text):
 
 @app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
-def pythoniscool(text = "is cool"):
+def pythoniscool(text="is cool"):
     """
      display “Python ” followed by the value of the text variable
      (replace underscore _ symbols with a space )
