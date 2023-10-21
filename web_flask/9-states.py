@@ -4,7 +4,7 @@ script that starts a Flask web application
 """
 
 from flask import Flask, render_template
-from models.state import State
+from models import *
 from models import storage
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route("/states/<state_id>", strict_slashes=False)
 def states(state_id=None):
     """display a HTML page: (inside the tag BODY)"""
-    states = storage.all(State)
+    states = storage.all("State")
     if state_id is not None:
         state_id = "State.{}".format(state_id)
     return render_template("9-states.html", states=states, state_id=state_id)
