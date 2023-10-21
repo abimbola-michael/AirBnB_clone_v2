@@ -13,6 +13,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
     __engine = None
@@ -47,7 +48,9 @@ class DBStorage:
                 cls = eval(cls)
             objects = self.__session.query(cls)
         return {
-                "{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects
+                "{}.{}".format(
+                    type(obj).__name__, obj.id
+                    ): obj for obj in objects
                 }
 
     def new(self, obj):
