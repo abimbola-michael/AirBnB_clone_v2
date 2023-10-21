@@ -14,7 +14,7 @@ app = Flask(__name__)
 def states(state_id=None):
     """display a HTML page: (inside the tag BODY)"""
     states = storage.all(State)
-    if state_id:
+    if state_id is not None:
         state_id = "State.{}".format(state_id)
     return render_template("9-states.html", states=states, state_id=state_id)
 
